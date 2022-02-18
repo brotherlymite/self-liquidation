@@ -1,4 +1,9 @@
 package-lock.json
+cache
+artifacts
+.vscode
+agpl-3.0
+SPDX-License-Identifier:
 # Logs
 logs
 *.log
