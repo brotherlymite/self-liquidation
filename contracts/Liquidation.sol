@@ -6,7 +6,7 @@ import "./../interfaces/ILendingPoolAddressesProviderV2.sol";
 import "./../interfaces/ILendingPoolV2.sol";
 import { SafeMath } from "@openzeppelin/contracts/utils/math/SafeMath.sol";
 
-contract Liquidation is FlashLoanReceiverBaseV2 {
+contract Liquidation is FlashLoanReceiverBaseV2, Withdrawable {
     using SafeMath for uint256;
     constructor(address _addressProvider)
         FlashLoanReceiverBaseV2(_addressProvider)
@@ -83,7 +83,7 @@ contract Liquidation is FlashLoanReceiverBaseV2 {
      *  Flash multiple assets
      */
     function flashloan(address[] memory assets, uint256[] memory amounts)
-        public
+        public onlyOwner
     {
         _flashloan(assets, amounts);
     }
@@ -91,7 +91,7 @@ contract Liquidation is FlashLoanReceiverBaseV2 {
     /*
      *  Flash loan 100000000000000000 wei (0.1 ether) worth of `_asset`
      */
-    function flashloan(address _asset) public {
+    function flashloan(address _asset) public onlyOwner {
         // bytes memory data = "";
         uint256 amount = 100000000000000000;
 
