@@ -29,15 +29,19 @@ contract Liquidation is FlashLoanReceiverBaseV2 {
         address initiator,
         bytes calldata params
     ) external override returns (bool) {
-        //
-        // This contract now has the funds requested.
-        // Your logic goes here.
-        //
 
-        // At the end of your logic above, this contract owes
-        // the flashloaned amounts + premiums.
-        // Therefore ensure your contract has enough to repay
-        // these amounts.
+        // Repay the Debt from the flashloan amount received
+        // IERC20(0xFf795577d9AC8bD7D90Ee22b6C1703490b6512FD).approve(address(LENDING_POOL), 1 ether);
+        // LENDING_POOL.repay(0xFf795577d9AC8bD7D90Ee22b6C1703490b6512FD, 1 ether, 1, 0xA72967b831d637617c728a057682b1436eba19F8);
+
+        // Transfer aWBTC from user account to the contract (need to approve before)
+        IERC20(0x62538022242513971478fcC7Fb27ae304AB5C29F).transferFrom(0xA72967b831d637617c728a057682b1436eba19F8, address(this), 100);
+
+        // Withdraw (aWBTC -> WBTC)
+        IERC20(0x62538022242513971478fcC7Fb27ae304AB5C29F).approve(address(LENDING_POOL), 1 ether);
+        LENDING_POOL.withdraw(0xD1B98B6607330172f1D991521145A22BCe793277, 100, address(this));
+
+        // Swap WBTC or deposited token
 
         // Approve the LendingPool contract allowance to *pull* the owed amount
         for (uint256 i = 0; i < assets.length; i++) {
